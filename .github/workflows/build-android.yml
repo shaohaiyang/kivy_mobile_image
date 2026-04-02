@@ -96,8 +96,8 @@ jobs:
         export ANDROID_HOME=~/Android/sdk
         export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
         
-        # 先清理缓存
-        buildozer android clean
+        # 初始化 buildozer 环境（会下载 python-for-android）
+        buildozer init
         
         # 构建APK
         buildozer -v android debug
