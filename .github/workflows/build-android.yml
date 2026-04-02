@@ -45,9 +45,9 @@ jobs:
           autoconf \
           libtool \
           pkg-config \
-          libncurses5-dev \
-          libncursesw5-dev \
-          libtinfo5 \
+          libncurses-dev \
+          libncursesw-dev \
+          libtinfo6 \
           cmake \
           libffi-dev \
           libssl-dev \
