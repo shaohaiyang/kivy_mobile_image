@@ -101,19 +101,19 @@ android.permissions = WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
 #android.features = android.hardware.usb.host
 
 # (int) Target Android API, should be as high as possible.
-android.api = 30
+android.api = 33
 
 # (int) Minimum API your APK / AAB will support.
 android.minapi = 21
 
 # (str) Android build-tools version to use
-android.build_tools_version = 30.0.3
+android.build_tools_version = 33.0.0
 
 # (int) Android SDK version to use
 # android.sdk = 31  # Deprecated: automatically determined by buildozer
 
 # (str) Android NDK version to use
-android.ndk = 23b
+android.ndk = 25.2.9519653
 
 # (int) Android NDK API to use. This is the minimum API your app will support, it should usually match android.minapi.
 android.ndk_api = 21
@@ -139,7 +139,7 @@ android.ndk_api = 21
 # agreements. This is intended for automation only. If set to False,
 # the default, you will be shown the license when first running
 # buildozer.
-# android.accept_sdk_license = False
+android.accept_sdk_license = True
 
 # (str) Android entry point, default is ok for Kivy-based app
 #android.entrypoint = org.kivy.android.PythonActivity
