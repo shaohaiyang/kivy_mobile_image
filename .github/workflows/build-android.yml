@@ -62,10 +62,6 @@ jobs:
       run: |
         pip install buildozer cython
     
-    - name: Accept Android SDK licenses
-      run: |
-        yes | sdkmanager --licenses || true
-    
     - name: Build APK
       run: |
         buildozer -v android debug
