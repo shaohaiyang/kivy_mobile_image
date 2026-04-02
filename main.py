@@ -224,7 +224,16 @@ class ImageEnhancerApp(App):
         file_chooser_layout = BoxLayout(orientation='vertical')
         
         from kivy.uix.filechooser import FileChooserListView
+        from plyer import storagepath
+        
+        # 获取 Android 的外部存储路径
+        if platform == 'android':
+            initial_path = storagepath.get_external_storage_dir() or '/sdcard'
+        else:
+            initial_path = os.path.expanduser('~')
+        
         filechooser = FileChooserListView(
+            path=initial_path,
             filters=['*.png', '*.jpg', '*.jpeg', '*.bmp', '*.gif', '*.webp'],
             font_name='Chinese'
         )
@@ -310,8 +319,20 @@ class ImageEnhancerApp(App):
         try:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             if platform == 'android':
-                from android.storage import primary_external_storage_path
-                save_dir = primary_external_storage_path()
+                from plyer import storagepath
+                
+                # 优先使用 /sdcard 路径，如果不存在则使用外部存储
+                possible_paths = ['/sdcard', storagepath.get_external_storage_dir()]
+                save_dir = None
+                for path in possible_paths:
+                    if os.path.exists(path):
+                        save_dir = path
+                        break
+                
+                if save_dir is None:
+                    save_dir = '/sdcard'
+                
+                # 保存到 Pictures 目录
                 filename = f'enhanced_{timestamp}.jpg'
                 save_path = os.path.join(save_dir, 'Pictures', filename)
             else:
@@ -332,7 +353,7 @@ class ImageEnhancerApp(App):
             
             self.status_label.text = f'已保存到: {save_path}'
             
-            if os.path.exists('temp_enhanced.png'):
+            if os.path.exists('temp_enhanced.png') and not platform == 'android':
                 os.remove('temp_enhanced.png')
             
             # 恢复默认占位图
