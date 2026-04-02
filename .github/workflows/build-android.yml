@@ -60,30 +60,13 @@ jobs:
     
     - name: Install Buildozer
       run: |
-        pip install buildozer cython
-        buildozer --version
-        cython --version
-    
-    - name: Cache Buildozer
-      uses: actions/cache@v4
-      with:
-        path: |
-          .buildozer
-          ~/.buildozer
-        key: buildozer-${{ hashFiles('buildozer.spec') }}
-    
-    - name: Download Android SDK/NDK cache
-      run: |
-        mkdir -p ~/.buildozer
-        if [ -f buildozer_cache.tar.gz ]; then
-          tar -xzf buildozer_cache.tar.gz -C ~/.buildozer
-        fi
+        pip install buildozer
     
     - name: Build APK
       run: |
         buildozer -v android debug
       continue-on-error: false
-      timeout-minutes: 90
+      timeout-minutes: 120
     
     - name: Upload APK
       uses: actions/upload-artifact@v4
@@ -91,14 +74,3 @@ jobs:
         name: android-apk
         path: bin/*.apk
         retention-days: 90
-    
-    - name: Cache Buildozer for next run
-      run: |
-        tar -czf buildozer_cache.tar.gz -C ~/.buildozer .
-    
-    - name: Upload cache
-      uses: actions/upload-artifact@v4
-      with:
-        name: buildozer-cache
-        path: buildozer_cache.tar.gz
-        retention-days: 7
