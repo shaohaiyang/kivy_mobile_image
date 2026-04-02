@@ -86,6 +86,10 @@ jobs:
         sdkmanager --licenses || true
         sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0" "ndk;25.2.9519653" || true
         
+        # 预下载 NDK 避免下载超时问题
+        echo "Pre-downloading NDK..."
+        wget -c --tries=3 --timeout=300 https://dl.google.com/android/repository/android-ndk-r25.2.9519653-linux.zip || true
+        
         # 创建 Buildozer 需要的许可证目录
         mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
         cp -r $ANDROID_HOME/licenses/* ~/.buildozer/android/platform/android-sdk/licenses/ || true
