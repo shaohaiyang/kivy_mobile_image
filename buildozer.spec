@@ -107,7 +107,7 @@ android.api = 31
 android.minapi = 21
 
 # (int) Android SDK version to use
-android.sdk = 31
+# android.sdk = 31  # Deprecated: automatically determined by buildozer
 
 # (str) Android NDK version to use
 android.ndk = 25b
