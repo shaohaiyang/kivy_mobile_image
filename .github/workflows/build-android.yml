@@ -46,7 +46,6 @@ jobs:
           libtool \
           pkg-config \
           libncurses-dev \
-          libncursesw-dev \
           libtinfo6 \
           cmake \
           libffi-dev \
