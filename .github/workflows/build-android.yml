@@ -62,57 +62,12 @@ jobs:
       run: |
         pip install buildozer cython
     
-    - name: Install Android SDK and accept licenses
-      run: |
-        # 下载并安装 Android Command Line Tools
-        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-        unzip commandlinetools-linux-9477386_latest.zip -d /tmp/cmdline-tools
-        mkdir -p ~/Android/sdk/cmdline-tools/latest
-        mv /tmp/cmdline-tools/cmdline-tools/* ~/Android/sdk/cmdline-tools/latest/
-        
-        # 设置环境变量
-        export ANDROID_HOME=~/Android/sdk
-        export ANDROID_SDK_ROOT=~/Android/sdk
-        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-        
-        # 创建许可证目录
-        mkdir -p $ANDROID_HOME/licenses
-        
-        # 接受所有许可证
-        echo "24333f8a63b6825ea9c5514f83c2829b004d1ee5" > $ANDROID_HOME/licenses/android-googletv-license
-        echo "d56f5187459ea8e12826e5b7cc594f6de8866d4d" > $ANDROID_HOME/licenses/android-sdk-license
-        echo "84831b9409646a918e4d6092c8cd8fb5cb37ce8e" > $ANDROID_HOME/licenses/android-sdk-preview-license
-        
-        # 使用 sdkmanager 安装必要的包
-        sdkmanager --licenses || true
-        sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0" "ndk;25.2.9519653" || true
-        
-        # 预下载 NDK 避免下载超时问题
-        echo "Pre-downloading NDK..."
-        wget -c --tries=3 --timeout=300 https://dl.google.com/android/repository/android-ndk-r25.2.9519653-linux.zip || true
-        
-        # 创建传统 tools 目录结构（buildozer 需要）
-        mkdir -p $ANDROID_HOME/tools/bin
-        ln -sf $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager $ANDROID_HOME/tools/bin/sdkmanager
-        
-        # 创建 Buildozer 需要的许可证目录
-        mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
-        cp -r $ANDROID_HOME/licenses/* ~/.buildozer/android/platform/android-sdk/licenses/ || true
-    
     - name: Build APK
       run: |
-        # 设置环境变量
-        export ANDROID_HOME=~/Android/sdk
-        export ANDROID_SDK_ROOT=~/Android/sdk
-        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools/bin
-        
-        # 让 buildozer 使用我们已安装的 SDK
-        export ANDROID_SDK_ROOT=$ANDROID_HOME
-        
-        # 构建APK（会自动下载 python-for-android）
-        buildozer -v android debug
+        # 构建APK（会自动下载所有需要的组件）
+        buildozer -v android debug || buildozer -v android debug
       continue-on-error: false
-      timeout-minutes: 120
+      timeout-minutes: 180
     
     - name: Upload APK
       uses: actions/upload-artifact@v4
