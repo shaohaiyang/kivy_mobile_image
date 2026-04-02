@@ -60,8 +60,9 @@ jobs:
     
     - name: Install Buildozer
       run: |
-        pip install buildozer
+        pip install buildozer cython
         buildozer --version
+        cython --version
     
     - name: Cache Buildozer
       uses: actions/cache@v4
