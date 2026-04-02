@@ -62,9 +62,9 @@ class ImageEnhancerApp(App):
     def setup_ui(self):
         self.title_label = Label(
             text=self.title,
-            font_size=28,
+            font_size=32,
             size_hint_y=None,
-            height=50,
+            height=55,
             bold=True,
             font_name='Chinese'
         )
@@ -87,7 +87,7 @@ class ImageEnhancerApp(App):
         self.select_button = Button(
             text='选择图片',
             size_hint_x=0.3,
-            font_size=16,
+            font_size=20,
             font_name='Chinese'
         )
         self.select_button.bind(on_press=self.select_image)
@@ -96,7 +96,7 @@ class ImageEnhancerApp(App):
         self.enhance_button = Button(
             text='一键美化',
             size_hint_x=0.3,
-            font_size=16,
+            font_size=20,
             font_name='Chinese',
             disabled=True
         )
@@ -106,7 +106,7 @@ class ImageEnhancerApp(App):
         self.save_button = Button(
             text='保存图片',
             size_hint_x=0.3,
-            font_size=16,
+            font_size=20,
             font_name='Chinese',
             disabled=True
         )
@@ -117,9 +117,9 @@ class ImageEnhancerApp(App):
 
         self.status_label = Label(
             text='请选择一张图片',
-            font_size=16,
+            font_size=20,
             size_hint_y=None,
-            height=35,
+            height=40,
             font_name='Chinese'
         )
         self.root.add_widget(self.status_label)
@@ -142,17 +142,16 @@ class ImageEnhancerApp(App):
         from kivy.uix.filechooser import FileChooserListView
         filechooser = FileChooserListView(
             filters=['*.png', '*.jpg', '*.jpeg', '*.bmp', '*.gif'],
-            font_size=14,
             font_name='Chinese'
         )
         file_chooser_layout.add_widget(filechooser)
         
         button_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=45)
         
-        cancel_btn = Button(text='取消', size_hint_x=0.5, font_size=14, font_name='Chinese')
+        cancel_btn = Button(text='取消', size_hint_x=0.5, font_size=18, font_name='Chinese')
         cancel_btn.bind(on_press=lambda x: popup.dismiss())
         
-        select_btn = Button(text='选择', size_hint_x=0.5, font_size=14, font_name='Chinese')
+        select_btn = Button(text='选择', size_hint_x=0.5, font_size=18, font_name='Chinese')
         select_btn.bind(on_press=lambda x: self.load_selected_image(filechooser.selection, popup))
         
         button_layout.add_widget(cancel_btn)
@@ -164,7 +163,7 @@ class ImageEnhancerApp(App):
         popup = Popup(
             title='选择图片',
             title_font='Chinese',
-            title_size=18,
+            title_size=22,
             content=content,
             size_hint=(0.9, 0.9)
         )
