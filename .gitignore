@@ -19,5 +19,7 @@ ENV/
 bin/
 temp_enhanced.png
 enhanced_*.jpg
+test_output.jpg
 .kivy/
 *.log
+buildozer_cache.tar.gz

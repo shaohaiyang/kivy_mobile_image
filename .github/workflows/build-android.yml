@@ -33,6 +33,9 @@ jobs:
           libavformat-dev \
           libavcodec-dev \
           zlib1g-dev \
+          libjpeg-dev \
+          libpng-dev \
+          libfreetype6-dev \
           libgstreamer1.0-dev \
           gstreamer1.0-plugins-base \
           gstreamer1.0-plugins-good
@@ -80,6 +83,7 @@ jobs:
       run: |
         buildozer -v android debug
       continue-on-error: false
+      timeout-minutes: 90
     
     - name: Upload APK
       uses: actions/upload-artifact@v3
