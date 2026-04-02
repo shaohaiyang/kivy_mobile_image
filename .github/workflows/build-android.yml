@@ -1,0 +1,100 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          git \
+          ffmpeg \
+          libsdl2-dev \
+          libsdl2-image-dev \
+          libsdl2-mixer-dev \
+          libsdl2-ttf-dev \
+          libportmidi-dev \
+          libswscale-dev \
+          libavformat-dev \
+          libavcodec-dev \
+          zlib1g-dev \
+          libgstreamer1.0-dev \
+          gstreamer1.0-plugins-base \
+          gstreamer1.0-plugins-good
+        sudo apt-get install -y \
+          openjdk-17-jdk \
+          automake \
+          autoconf \
+          libtool \
+          pkg-config \
+          libncurses5-dev \
+          libncursesw5-dev \
+          libtinfo5 \
+          cmake \
+          libffi-dev \
+          libssl-dev \
+          lld
+    
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    
+    - name: Install Buildozer
+      run: |
+        pip install buildozer
+        buildozer --version
+    
+    - name: Cache Buildozer
+      uses: actions/cache@v3
+      with:
+        path: |
+          .buildozer
+          ~/.buildozer
+        key: buildozer-${{ hashFiles('buildozer.spec') }}
+    
+    - name: Download Android SDK/NDK cache
+      run: |
+        mkdir -p ~/.buildozer
+        if [ -f buildozer_cache.tar.gz ]; then
+          tar -xzf buildozer_cache.tar.gz -C ~/.buildozer
+        fi
+    
+    - name: Build APK
+      run: |
+        buildozer -v android debug
+      continue-on-error: false
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: android-apk
+        path: bin/*.apk
+        retention-days: 90
+    
+    - name: Cache Buildozer for next run
+      run: |
+        tar -czf buildozer_cache.tar.gz -C ~/.buildozer .
+    
+    - name: Upload cache
+      uses: actions/upload-artifact@v3
+      with:
+        name: buildozer-cache
+        path: buildozer_cache.tar.gz
+        retention-days: 7
